@@ -1,0 +1,17 @@
+moniter_server:
+  host:
+    52.25.222.175
+  user:
+    ubuntu
+  port:
+    22
+  keyfile:
+    ./conf/auto_test.pem
+  build_path:
+    ./btfs_moniter
+  moniter_case:
+    btfs_scan:
+      https://api.apifox.cn/api/v1/api-test/ci-config/355170/detail?token=xxtXLuH-me4aV6BYMGb6Da
+    btfs_storage3:
+
+    btfs_dashboard:
