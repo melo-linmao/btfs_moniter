@@ -15,3 +15,5 @@ moniter_server:
     btfs_storage3:
 
     btfs_dashboard:
+  alert_url:
+    https://bot-jira.insidebt.net/btfs_alert

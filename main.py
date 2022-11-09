@@ -24,6 +24,7 @@ class Btfs_Moniter():
         self.btfs_scan_case_url = moniter_conf["moniter_server"]["moniter_case"]["btfs_scan"]
         self.btfs_storage3_case_url = moniter_conf["moniter_server"]["moniter_case"]["btfs_storage3"]
         self.btfs_dashboard_case_url = moniter_conf["moniter_server"]["moniter_case"]["btfs_dashboard"]
+        self.alert_url = moniter_conf["moniter_server"]["alert_url"]
 
     def server_connect(self):
         # 连接监控服务器
@@ -96,7 +97,7 @@ class Btfs_Moniter():
         alert_msg["channel"] = "alert_test"
         alert_msg["failure_json"] = alert_message
         alert_msg = json.dumps(alert_msg)
-        respons = requests.request(method='POST', url='http://127.0.0.1:5000/btfs_alert', json=alert_msg)
+        respons = requests.request(method='POST', url=self.alert_url, json=alert_msg)
         print(respons)
         #self.exec_moniter_command('echo')
         #print(alert_message["moniter_report"])
@@ -115,7 +116,7 @@ if __name__ == '__main__':
     output = parse_args.output
     btfs_moniter = Btfs_Moniter()
     btfs_moniter.server_connect()
-    btfs_moniter.moniter_run('btfs_scan', 'html')
+    btfs_moniter.moniter_run(moniter_case, output)
     btfs_moniter.result_check()
     btfs_moniter.server_close()
 
