@@ -13,7 +13,8 @@ moniter_server:
     btfs_scan:
       https://api.apifox.cn/api/v1/api-test/ci-config/355170/detail?token=xxtXLuH-me4aV6BYMGb6Da
     btfs_storage3:
-
+      https://api.apifox.cn/api/v1/api-test/ci-config/355340/detail?token=xd77VdzOMBg1BYZJ3rHHoI
     btfs_dashboard:
+
   alert_url:
     https://bot-jira.insidebt.net/btfs_alert
