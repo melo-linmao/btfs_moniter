@@ -18,3 +18,5 @@ moniter_server:
 
   alert_url:
     https://bot-jira.insidebt.net/btfs_alert
+  alert_channel:
+    alert_test

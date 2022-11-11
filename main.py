@@ -25,6 +25,7 @@ class Btfs_Moniter():
         self.btfs_storage3_case_url = moniter_conf["moniter_server"]["moniter_case"]["btfs_storage3"]
         self.btfs_dashboard_case_url = moniter_conf["moniter_server"]["moniter_case"]["btfs_dashboard"]
         self.alert_url = moniter_conf["moniter_server"]["alert_url"]
+        self.alert_channel = moniter_conf["moniter_server"]["alert_channel"]
 
     def server_connect(self):
         # 连接监控服务器
@@ -94,7 +95,7 @@ class Btfs_Moniter():
         alert_message["moniter_report"] = moniter_report
         alert_message["moniter_case"] = moniter_case
         alert_message["failures"] = failure_json
-        alert_msg["channel"] = "alert_test"
+        alert_msg["channel"] = self.alert_channel
         alert_msg["failure_json"] = alert_message
         alert_msg = json.dumps(alert_msg)
         respons = requests.request(method='POST', url=self.alert_url, json=alert_msg)
