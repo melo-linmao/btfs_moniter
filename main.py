@@ -54,21 +54,31 @@ class Btfs_Moniter():
         return out, err
 
     def moniter_run(self, moniter_case, output):
+        failures_time = 0
         self.moniter_case = moniter_case
+        self.output = output
         if (moniter_case == "btfs_scan"):
             self.case_url = self.btfs_scan_case_url
         if (moniter_case == "btfs_storage3"):
             self.case_url = self.btfs_storage3_case_url
         if (moniter_case == "btfs_dashboard"):
             self.case_url = self.btfs_dashboard_case_url
-        res,err = self.exec_moniter_command('date +%Y-%m-%d-%H-%M-%S')
-        moniter_time = res
-        self.report_name = moniter_case + '-' + moniter_time
-        res, err = self.exec_moniter_command('apifox run ' + self.case_url + ' -r ' + output + ',html,json' + ' --out-file ' + self.report_name)
-        if err == '':
-            print("moniter task finished,you can check the report to use http://52.25.222.175:8000/")
-        else:
-            print(err)
+        for i in range(4):
+            res, err = self.exec_moniter_command('date +%Y-%m-%d-%H-%M-%S')
+            moniter_time = res
+            self.report_name = moniter_case + '-' + moniter_time
+            res, err = self.exec_moniter_command('apifox run ' + self.case_url + ' -r ' + output + ',html,json' + ' --out-file ' + self.report_name)
+            if err == '':
+                print("moniter task finished,you can check the report to use http://52.25.222.175:8000/")
+                self.failures_json = self.result_check()
+                if len(self.failures_json) != 0:
+                    failures_time = failures_time + 1
+                else:
+                    print('monitor task finished and there is no alert message you need to foucs on')
+            else:
+                print(err)
+        if failures_time == 4:
+            self.send_alert_message(self.failures_json)
 
     def result_check(self):
         try:
@@ -79,11 +89,7 @@ class Btfs_Moniter():
             else:
                 config_json = json.loads(res)
                 failures_json = config_json['result']['failures']
-                #print(len(failures_json))
-                if len(failures_json) != 0:
-                    self.send_alert_message(failures_json)
-                else:
-                    print('monitor task finished and there is no alert message you need to foucs on')
+                return failures_json
         except Exception as e:
             raise Exception(e)
 
@@ -118,7 +124,6 @@ if __name__ == '__main__':
     btfs_moniter = Btfs_Moniter()
     btfs_moniter.server_connect()
     btfs_moniter.moniter_run(moniter_case, output)
-    btfs_moniter.result_check()
     btfs_moniter.server_close()
 
 
